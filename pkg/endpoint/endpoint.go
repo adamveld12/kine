@@ -30,6 +30,7 @@ const (
 	ETCDBackend     = "etcd3"
 	MySQLBackend    = "mysql"
 	PostgresBackend = "postgres"
+	ConsulBackend 	= "consul"
 )
 
 type Config struct {
@@ -233,6 +234,8 @@ func getKineStorageBackend(ctx context.Context, driver, dsn string, cfg Config) 
 		backend, err = pgsql.New(ctx, dsn, cfg.BackendTLSConfig, cfg.ConnectionPoolConfig)
 	case MySQLBackend:
 		backend, err = mysql.New(ctx, dsn, cfg.BackendTLSConfig, cfg.ConnectionPoolConfig)
+	case ConsulBackend:
+		backend, err = consul.New(ctx, dsn, cfg.BackendTLSConfig)
 	default:
 		return false, nil, fmt.Errorf("storage backend is not defined")
 	}
